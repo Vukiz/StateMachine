@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Stateless;
+using Stateless.Graph;
 using UnityEngine;
 
 public class PreloadStateController
@@ -26,8 +27,7 @@ public class PreloadStateController
 
 	public PreloadStateController()
 	{
-		_machine = new StateMachine<PreloadMachineState, PreloadStateTrigger>(PreloadMachineState.GetEndpoints);
-		_machine.SetTriggerParameters<List<Endpoint>>(PreloadStateTrigger.EndpointsGot);
+		_machine = new StateMachine<PreloadMachineState, PreloadStateTrigger>(PreloadMachineState.Start);
 
 		ConfigureTransitions();
 
@@ -53,10 +53,6 @@ public class PreloadStateController
 			.Permit(PreloadStateTrigger.Authenticated, PreloadMachineState.Authorization);
 
 		_machine.Configure(PreloadMachineState.Authorization)
-			.Permit(PreloadStateTrigger.Authenticated, PreloadMachineState.GetUserData)
-			.Permit(PreloadStateTrigger.Disconnected, PreloadMachineState.Disconnect);
-
-		_machine.Configure(PreloadMachineState.Disconnect)
 			.Permit(PreloadStateTrigger.Authorized, PreloadMachineState.GetUserData)
 			.Permit(PreloadStateTrigger.Disconnected, PreloadMachineState.Disconnect);
 
@@ -93,6 +89,11 @@ public class PreloadStateController
 		Debug.Log("[StateEnter] " + state);
 		StateEntered?.Invoke(state);
 	}
+	
+	public string ToDotGraph()
+	{
+		return UmlDotGraph.Format(_machine.GetInfo());
+	}
 
 	public void Start()
 	{
@@ -121,6 +122,12 @@ public class PreloadStateController
 	{
 		Debug.Log("[TriggerFire] AssetsLoaded");
 		_machine.Fire(PreloadStateTrigger.AssetsLoaded);
+	}
+	
+	public void EndpointsGot()
+	{
+		Debug.Log("[TriggerFire] EndpointsGot");
+		_machine.Fire(PreloadStateTrigger.EndpointsGot);
 	}
 
 	public void Authenticated()

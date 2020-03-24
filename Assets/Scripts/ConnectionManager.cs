@@ -3,29 +3,30 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public static class ConnectionManager
+public class ConnectionManager
 {
-	private static readonly PreloadStateController StateController;
+	private readonly PreloadStateController _stateController;
 
-	static ConnectionManager()
+	public ConnectionManager()
 	{
-		StateController = IoCContainer.Resolve<PreloadStateController>();
-		StateController.StateEntered += OnStateEntered;
+		_stateController = IoCContainer.Resolve<PreloadStateController>();
+		_stateController.StateEntered += OnStateEntered;
 	}
 
-	private static void OnStateEntered(PreloadMachineState newState)
+	private void OnStateEntered(PreloadMachineState newState)
 	{
 		switch (newState)
 		{
 			case PreloadMachineState.Connect:
 			{
-				Action connectionAction = () =>
+				void ConnectionAction()
 				{
 					Debug.Log("Connecting");
 					Thread.Sleep(2000);
-					Connect(); 
-				};
-				Task connectionTask = new Task(Connect);
+					Connect();
+				}
+
+				Task connectionTask = new Task(ConnectionAction);
 				connectionTask.Start();
 				break;
 			}
@@ -37,13 +38,13 @@ public static class ConnectionManager
 		}
 	}
 
-	private static void Connect()
+	private void Connect()
 	{
-		StateController.Connected();
+		_stateController.Connected();
 	}
 
-	private static void Disconnect()
+	private void Disconnect()
 	{
-		StateController.Disconnected();
+		_stateController.Disconnected();
 	}
 }

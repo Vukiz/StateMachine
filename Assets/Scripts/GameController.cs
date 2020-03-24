@@ -4,59 +4,42 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
 	[SerializeField] private Button _startButton;
+	[SerializeField] private Button _printGraphButton;
+
+	private EndpointLoader _endpointLoader;
+	private AssetLoader _assetLoader;
+	private ConnectionManager _connectionManager;
+	private AuthManager _authManager;
+	private UserDataManager _userDataManager;
+	private UserCreator _userCreator;
+	
 	
 	private PreloadStateController _stateController;
-	private void Start()
+
+	private void Awake()
 	{
-		_stateController = new PreloadStateController();
-		_startButton.onClick.AddListener(OnStartButtonClick);
+		_stateController = IoCContainer.Resolve<PreloadStateController>();
+		_endpointLoader =  IoCContainer.Resolve<EndpointLoader>();
+		_assetLoader =  IoCContainer.Resolve<AssetLoader>();
+		_connectionManager = IoCContainer.Resolve<ConnectionManager>();
+		_authManager = IoCContainer.Resolve<AuthManager>();
+		_userDataManager = IoCContainer.Resolve<UserDataManager>();
+		_userCreator = IoCContainer.Resolve<UserCreator>();
 	}
 
-
-	private void OnGetEndpointsEntry()
+	private void Start()
 	{
-		Debug.Log("Getting endpoints");
+		_startButton.onClick.AddListener(OnStartButtonClick);
+		_printGraphButton.onClick.AddListener(OnPrintButtonClick);
+	}
+
+	private void OnPrintButtonClick()
+	{
+		Debug.Log(_stateController.ToDotGraph());
 	}
 
 	private void OnStartButtonClick()
 	{
 		_stateController.Start();
-	}
-
-	private void OnAssetLoadingEntry()
-	{
-		Debug.Log("Assets start Loading");
-		//AssetsLoader.Load());
-		//wait
-		_stateController.AssetsLoaded();
-	}
-	
-	private void OnAuthenticationEntry()
-	{
-		Debug.Log("Authentication");
-	}
-
-	private void OnAuthorizationEntry()
-	{
-		Debug.Log("Authorization");
-	}
-
-	private void OnGetUserDataEntry()
-	{
-		Debug.Log("GetUserData");
-	}
-
-	private void OnCreateNewUserEntry()
-	{
-		Debug.Log("CreateNewUser");
-	}
-
-	private void OnGameEntry()
-	{
-		Debug.Log("Game");
-	}
-	private void OnWaitUserInputEntry()
-	{
-		Debug.Log("WaitUserInput");
 	}
 }

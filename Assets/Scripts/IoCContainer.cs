@@ -9,6 +9,12 @@ internal static class IoCContainer
 	{
 		_container = new Container();
 		Register(() => new PreloadStateController()).AsSingleton();
+		Register(() => new EndpointLoader()).AsSingleton();
+		Register(() => new AssetLoader()).AsSingleton();
+		Register(() => new ConnectionManager()).AsSingleton();
+		Register(() => new AuthManager()).AsSingleton();
+		Register(() => new UserDataManager()).AsSingleton();
+		Register(() => new UserCreator()).AsSingleton();
 	}
 
 	public static Container.IRegisteredType Register<T>(Type type) => _container.Register(typeof(T), type);
