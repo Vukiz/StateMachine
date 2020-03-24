@@ -34,6 +34,6 @@ public class UserCreator
 
 	private void CreatedUser()
 	{
-		_stateController.UserCreated();
+		_stateController.Trigger(PreloadStateTrigger.UserCreated);
 	}
 }

@@ -47,11 +47,11 @@ public class AuthManager
 
 	private void Authenticated()
 	{
-		_stateController.Authenticated();
+		_stateController.Trigger(PreloadStateTrigger.Authenticated);
 	}
 	
 	private void Authorized()
 	{
-		_stateController.Authorized();
+		_stateController.Trigger(PreloadStateTrigger.Authorized);
 	}
 }

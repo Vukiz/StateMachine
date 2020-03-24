@@ -40,11 +40,11 @@ public class ConnectionManager
 
 	private void Connect()
 	{
-		_stateController.Connected();
+		_stateController.Trigger(PreloadStateTrigger.Connected);
 	}
 
 	private void Disconnect()
 	{
-		_stateController.Disconnected();
+		_stateController.Trigger(PreloadStateTrigger.Disconnected);
 	}
 }

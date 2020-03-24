@@ -1,26 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using Stateless;
 using Stateless.Graph;
 using UnityEngine;
 
 public class PreloadStateController
 {
-	private enum PreloadStateTrigger
-	{
-		Start,
-		EndpointsGot,
-		AssetsLoaded,
-		Connected,
-		Authenticated,
-		Authorized,
-		UserDataReceived,
-		NoUserDataReceived,
-		UserCreated,
-		Disconnected,
-		DissconnectCompleted,
-	}
-
 	private readonly StateMachine<PreloadMachineState, PreloadStateTrigger> _machine;
 
 	public Action<PreloadMachineState> StateEntered;
@@ -95,68 +79,8 @@ public class PreloadStateController
 		return UmlDotGraph.Format(_machine.GetInfo());
 	}
 
-	public void Start()
+	public void Trigger(PreloadStateTrigger stateTrigger)
 	{
-		_machine.Fire(PreloadStateTrigger.Start);
-	}
-
-	public void Disconnected()
-	{
-		Debug.Log("[TriggerFire] Disconnect");
-		_machine.Fire(PreloadStateTrigger.Disconnected);
-	}
-	
-	public void Connected()
-	{		
-		Debug.Log("[TriggerFire] Connected");
-		_machine.Fire(PreloadStateTrigger.Connected);
-	}
-
-	public void DissconnectCompleted()
-	{
-		Debug.Log("[TriggerFire] DissconnectCompleted");
-		_machine.Fire(PreloadStateTrigger.DissconnectCompleted);
-	}
-
-	public void AssetsLoaded()
-	{
-		Debug.Log("[TriggerFire] AssetsLoaded");
-		_machine.Fire(PreloadStateTrigger.AssetsLoaded);
-	}
-	
-	public void EndpointsGot()
-	{
-		Debug.Log("[TriggerFire] EndpointsGot");
-		_machine.Fire(PreloadStateTrigger.EndpointsGot);
-	}
-
-	public void Authenticated()
-	{
-		Debug.Log("[TriggerFire] Authenticated");
-		_machine.Fire(PreloadStateTrigger.Authenticated);
-	}
-
-	public void Authorized()
-	{
-		Debug.Log("[TriggerFire] Authorized");
-		_machine.Fire(PreloadStateTrigger.Authorized);
-	}
-
-	public void UserDataReceived()
-	{
-		Debug.Log("[TriggerFire] UserDataReceived");
-		_machine.Fire(PreloadStateTrigger.UserDataReceived);
-	}
-
-	public void UserCreated()
-	{
-		Debug.Log("[TriggerFire] UserCreated");
-		_machine.Fire(PreloadStateTrigger.UserCreated);
-	}
-
-	public void NoUserDataReceived()
-	{
-		Debug.Log("[TriggerFire] NoUserDataReceived");
-		_machine.Fire(PreloadStateTrigger.NoUserDataReceived);
+		Debug.Log("[TriggerFire] : " + stateTrigger);
 	}
 }

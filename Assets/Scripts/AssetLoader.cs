@@ -34,6 +34,6 @@ public class AssetLoader
 
 	private void AssetsLoaded()
 	{
-		_stateController.AssetsLoaded();
+		_stateController.Trigger(PreloadStateTrigger.AssetsLoaded);
 	}
 }

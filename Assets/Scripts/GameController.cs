@@ -12,8 +12,6 @@ public class GameController : MonoBehaviour
 	private AuthManager _authManager;
 	private UserDataManager _userDataManager;
 	private UserCreator _userCreator;
-	
-	
 	private PreloadStateController _stateController;
 
 	private void Awake()
@@ -40,6 +38,6 @@ public class GameController : MonoBehaviour
 
 	private void OnStartButtonClick()
 	{
-		_stateController.Start();
+		_stateController.Trigger(PreloadStateTrigger.Start);
 	}
 }

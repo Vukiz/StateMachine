@@ -36,11 +36,11 @@ public class UserDataManager
 	{
 		if (string.IsNullOrEmpty(data))
 		{
-			_stateController.NoUserDataReceived();
+			_stateController.Trigger(PreloadStateTrigger.NoUserDataReceived);
 		}
 		else
 		{
-			_stateController.UserDataReceived();
+			_stateController.Trigger(PreloadStateTrigger.UserDataReceived);
 		}
 	}
 }

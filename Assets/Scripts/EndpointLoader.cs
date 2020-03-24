@@ -34,6 +34,6 @@ public class EndpointLoader
 
 	private void EndpointsGot()
 	{
-		_stateController.EndpointsGot();
+		_stateController.Trigger(PreloadStateTrigger.EndpointsGot);
 	}
 }
