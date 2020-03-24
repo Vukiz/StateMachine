@@ -1,7 +1,4 @@
-﻿namespace DefaultNamespace
+﻿internal class Endpoint
 {
-	internal class Endpoint
-	{
-		public string _address;
-	}
+	public string _address;
 }
