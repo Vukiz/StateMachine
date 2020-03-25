@@ -3,10 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class Connection : PreloadingStateMachineClient
-{
-    private const int MaxConnections = 3;
-
-    private static int connectionsCounter = 0;       
+{  
 
     public Connection(IStateMachine<PreloadStateTrigger> machine) : base(machine)
     {
@@ -17,7 +14,7 @@ public class Connection : PreloadingStateMachineClient
     {
         void ConnectionAction()
         {
-            Debug.Log("Connecting : " + connectionsCounter);
+            Debug.Log("Connecting : " + _connectionsCounter);
             Thread.Sleep(2000);
             Connect();
         }
@@ -29,22 +26,27 @@ public class Connection : PreloadingStateMachineClient
 
     private void Connect()
     {
-        if (connectionsCounter++ < MaxConnections)
+        if (TryConnect())
+        {
+            Debug.Log("[Connection] Ok");
+            SetTrigger(PreloadStateTrigger.Connected);
+        }
+        else
         {
             Debug.LogWarning("[Connection] Emulate failed connection");
-            SetTrigger(PreloadStateTrigger.Reconnect);
-            return;
-        }
-        /*
-        else  //TODO disconnect logic here
-        {
-            connectionsCounter = 0;
-            Debug.Log("[Connection] Tries timeout");
             SetTrigger(PreloadStateTrigger.Disconnected);
-        }*/
-        
-        connectionsCounter = 0;
-        Debug.Log("[Connection] Ok");
-        SetTrigger(PreloadStateTrigger.Connected);
+        }
+    }
+
+    private int _connectionsCounter;     
+    private bool TryConnect()
+    {
+        if (_connectionsCounter++ < 2) // counter is here just to simulate disconnection, further in development connection shouldn't count connectionTries
+        {
+            return false;
+        }
+
+        _connectionsCounter = 0;
+        return true;
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.MinIoC.states;
 using Stateless;
 using Stateless.Graph;
 using UnityEngine;
@@ -17,7 +16,7 @@ public enum PreloadStateTrigger
 	NoUserDataReceived,
 	UserCreated,
 	Disconnected,
-	DissconnectCompleted,
+	ReconnectFailed,
 	Reconnect,
 }
 
@@ -49,8 +48,7 @@ public class PreloadStateMachineController : IStateMachine<PreloadStateTrigger>
 
 		_machine.Configure(PreloadMachineState.Connect)
 			.Permit(PreloadStateTrigger.Connected, PreloadMachineState.Authentication)
-			.Permit(PreloadStateTrigger.Disconnected, PreloadMachineState.Disconnect)
-			.PermitReentry(PreloadStateTrigger.Reconnect);
+			.Permit(PreloadStateTrigger.Disconnected, PreloadMachineState.Disconnect);
 
 		_machine.Configure(PreloadMachineState.Authentication)
 			.Permit(PreloadStateTrigger.Authenticated, PreloadMachineState.Authorization);
@@ -71,7 +69,10 @@ public class PreloadStateMachineController : IStateMachine<PreloadStateTrigger>
 
 		_machine.Configure(PreloadMachineState.Disconnect)
 			.Permit(PreloadStateTrigger.Reconnect, PreloadMachineState.Connect)
-			.Permit(PreloadStateTrigger.DissconnectCompleted, PreloadMachineState.WaitUserInput);
+			.Permit(PreloadStateTrigger.ReconnectFailed, PreloadMachineState.WaitUserInput);
+
+		_machine.Configure(PreloadMachineState.WaitUserInput)
+			.Permit(PreloadStateTrigger.Start, PreloadMachineState.GetEndpoints);
 	}
 
 	private void ConfigureStates()
