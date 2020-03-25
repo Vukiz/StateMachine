@@ -3,41 +3,36 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-	[SerializeField] private Button _startButton;
-	[SerializeField] private Button _printGraphButton;
+    [SerializeField] private Button _startButton;
+    [SerializeField] private Button _printGraphButton;
 
-	private EndpointLoader _endpointLoader;
-	private AssetLoader _assetLoader;
-	private ConnectionManager _connectionManager;
-	private AuthManager _authManager;
-	private UserDataManager _userDataManager;
-	private UserCreator _userCreator;
-	private PreloadStateController _stateController;
+    private EndpointLoader _endpointLoader;
+    private AssetLoader _assetLoader;
+    private Connection _connection;
+    private AuthenticationManager _authenticationManager;
+    private UserDataManager _userDataManager;
+    private UserCreator _userCreator;
 
-	private void Awake()
-	{
-		_stateController = IoCContainer.Resolve<PreloadStateController>();
-		_endpointLoader =  IoCContainer.Resolve<EndpointLoader>();
-		_assetLoader =  IoCContainer.Resolve<AssetLoader>();
-		_connectionManager = IoCContainer.Resolve<ConnectionManager>();
-		_authManager = IoCContainer.Resolve<AuthManager>();
-		_userDataManager = IoCContainer.Resolve<UserDataManager>();
-		_userCreator = IoCContainer.Resolve<UserCreator>();
-	}
+    private PreloadStateMachineController _stateMachineController;
 
-	private void Start()
-	{
-		_startButton.onClick.AddListener(OnStartButtonClick);
-		_printGraphButton.onClick.AddListener(OnPrintButtonClick);
-	}
+    private void Awake()
+    {
+        _stateMachineController = IoCContainer.Resolve<PreloadStateMachineController>();
+    }
 
-	private void OnPrintButtonClick()
-	{
-		Debug.Log(_stateController.ToDotGraph());
-	}
+    private void Start()
+    {
+        _startButton.onClick.AddListener(OnStartButtonClick);
+        _printGraphButton.onClick.AddListener(OnPrintButtonClick);
+    }
 
-	private void OnStartButtonClick()
-	{
-		_stateController.Trigger(PreloadStateTrigger.Start);
-	}
+    private void OnPrintButtonClick()
+    {
+        Debug.Log(_stateMachineController.ToDotGraph());
+    }
+
+    private void OnStartButtonClick()
+    {
+        _stateMachineController.SetTrigger(PreloadStateTrigger.Start);
+    }
 }
