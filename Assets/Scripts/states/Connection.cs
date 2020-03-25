@@ -33,12 +33,18 @@ public class Connection : PreloadingStateMachineClient
         {
             Debug.LogWarning("[Connection] Emulate failed connection");
             SetTrigger(PreloadStateTrigger.Reconnect);
+            return;
         }
-        else
+        /*
+        else  //TODO disconnect logic here
         {
             connectionsCounter = 0;
-            Debug.Log("[Connection] Ok");
-            SetTrigger(PreloadStateTrigger.Connected);
-        }
+            Debug.Log("[Connection] Tries timeout");
+            SetTrigger(PreloadStateTrigger.Disconnected);
+        }*/
+        
+        connectionsCounter = 0;
+        Debug.Log("[Connection] Ok");
+        SetTrigger(PreloadStateTrigger.Connected);
     }
 }
